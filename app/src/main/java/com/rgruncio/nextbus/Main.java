@@ -11,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -22,21 +21,34 @@ public class Main extends AppCompatActivity {
     private TextView textView;
     private ToggleButton button;
 
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        //Rejestracja Receivera odbierającego informacje pochodzące z usługi GPS
         if(broadcastReceiver == null){
             broadcastReceiver = new BroadcastReceiver() {
+
+                //funkcja wywoływana w momencie odebrania danych pochodzących z usługi GPS
                 @Override
                 public void onReceive(Context context, Intent intent) {
+
+
                     textView.setText("Współrzędne:\nlongitude: " + intent.getExtras().get("longitude").toString()
                             + "\nlatitude: " + intent.getExtras().get("latitude").toString());
+
+
+                    //TODO: w tym miejscu będzie algorytm obsługujący wyszukiwanie najbliższego przystanku
+
                 }
             };
         }
         registerReceiver(broadcastReceiver,new IntentFilter("location_update"));
     }
 
+
+    //Zapobiegamy wyciekowi pamięci przy zamykaniu aplikacji
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -45,6 +57,7 @@ public class Main extends AppCompatActivity {
         }
     }
 
+    //Funkcja wywoływana przy uruchamianiu poraz pierwszy aplikacji (tworzenie UI i inicjalizacja obiektów)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,18 +65,23 @@ public class Main extends AppCompatActivity {
 
         textView = (TextView) findViewById(R.id.textView);
 
+        //sprawdzamy czy aplikacja ma uprawnienia do korzystania z usługi GPS
         if(!runtime_permissions())
             enable_buttons();
 
     }
 
+    //aktywacja widgetów
     private void enable_buttons() {
         button = (ToggleButton) findViewById(R.id.toggleButton);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //jeśli przycisk włączony - startujemy usługę GPSService
                 if (isChecked){
-                    startService(new Intent(getApplicationContext(), GPSService.class));
+                    Intent i = new Intent(getApplicationContext(), GPSService.class);
+                    //TODO: uzupełnić przekazywanie danych do usługi
+                    startService(i);
                 }
                 else {
                     stopService(new Intent(getApplicationContext(), GPSService.class));
@@ -72,6 +90,7 @@ public class Main extends AppCompatActivity {
         });
     }
 
+    //funkcja sprawdzająca uprawnienia do korzystania z GPS
     private boolean runtime_permissions() {
         if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
 
@@ -83,6 +102,7 @@ public class Main extends AppCompatActivity {
     }
 
 
+    //funkcja pobierająca aktualne uprawnienia do usługi GPS
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

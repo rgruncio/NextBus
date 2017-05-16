@@ -12,13 +12,27 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 
 public class GPSService extends Service {
+
+
+
     private LocationListener listener;
     private LocationManager locationManager;
+
+    private String value;
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+
+    //funkcja pobierająca parametry przekazywane przy wywoływaniu usługi
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        //TODO: do uzupełnienia !!!
+        return START_STICKY;
     }
 
     @Override
@@ -27,6 +41,9 @@ public class GPSService extends Service {
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+
+                //w momencie wykrycia zmiany lokalizacji urządzenia, usługa wysyła Intent z aktualnymi
+                //danymi geolokalizacyjnymi
                 Intent i = new Intent("location_update");
                 i.putExtra("longitude", location.getLongitude());
                 i.putExtra("latitude", location.getLatitude());
@@ -45,6 +62,9 @@ public class GPSService extends Service {
 
             @Override
             public void onProviderDisabled(String s) {
+
+                //jeśli GPS w urządzeniu jest wyłączony, przenosimy użytkownika do menu systemowego,
+                // w którym ma on możliwość włączyć usługę GPS
                 Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(i);
@@ -57,6 +77,7 @@ public class GPSService extends Service {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,0,listener);
 
     }
+
 
     @Override
     public void onDestroy() {
