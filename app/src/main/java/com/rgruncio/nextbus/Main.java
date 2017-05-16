@@ -34,12 +34,21 @@ public class Main extends AppCompatActivity {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
+                    //tymczasowo wypisuję otrzymane współrzędne dla celów testowych
+                    String latitude = null, longitude = null;
+                    try {
+                        latitude = intent.getExtras().get("latitude").toString();
+                        longitude = intent.getExtras().get("longitude").toString();
+                    } catch (NullPointerException ex){
+                        ex.printStackTrace();
+                    }
 
-                    textView.setText("Współrzędne:\nlongitude: " + intent.getExtras().get("longitude").toString()
-                            + "\nlatitude: " + intent.getExtras().get("latitude").toString());
+                    textView.setText("Współrzędne:\nlongitude: " + longitude
+                            + "\nlatitude: " + latitude);
 
 
                     //TODO: w tym miejscu będzie algorytm obsługujący wyszukiwanie najbliższego przystanku
+                    //TODO: na podstawie otrzymanej lokalizacji z urządzenia
 
                 }
             };
