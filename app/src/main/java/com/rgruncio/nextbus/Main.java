@@ -19,7 +19,6 @@ public class Main extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
     private TextView textView;
-    private ToggleButton button;
 
 
     @Override
@@ -82,7 +81,7 @@ public class Main extends AppCompatActivity {
 
     //aktywacja widgetów
     private void enable_buttons() {
-        button = (ToggleButton) findViewById(R.id.toggleButton);
+        ToggleButton button = (ToggleButton) findViewById(R.id.toggleButton);
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
