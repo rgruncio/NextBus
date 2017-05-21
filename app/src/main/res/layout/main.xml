@@ -11,26 +11,27 @@
         android:id="@+id/toggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToggleButton"
-        android:textOff="Usługa wyłączona"
-        android:textOn="Usługa włączona"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="30dp"
-        app:layout_constraintHorizontal_bias="0.502"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginTop="30dp"
+        android:text="@string/toggleButtonText"
+        android:textOff="@string/toggleButtonOff"
+        android:textOn="@string/toggleButtonOn"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="Współrzędne:"
+        android:text="@string/textViewLocalisation"
         android:textAlignment="center"
         app:layout_constraintTop_toBottomOf="@+id/toggleButton"
         tools:layout_editor_absoluteX="8dp" />
+
 </android.support.constraint.ConstraintLayout>

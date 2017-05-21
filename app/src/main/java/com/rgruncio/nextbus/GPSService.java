@@ -17,8 +17,9 @@ public class GPSService extends Service {
 
     private LocationListener listener;
     private LocationManager locationManager;
+    private Location givenLocation;
 
-    private String value;
+    private boolean CHECKING_DISTANCE_WANTED = false;
 
     @Nullable
     @Override
@@ -31,7 +32,15 @@ public class GPSService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        //TODO: do uzupełnienia !!!
+        //jeśli usługa otrzymuje parametr "check_distance"
+        //co oznacza, że chcemy sprawdzić odległość między aktualną
+        //pozycją urządzenia a zadaną lokalizacją:
+        if (intent.getExtras().containsKey("check_distance")){
+            CHECKING_DISTANCE_WANTED = true;
+            givenLocation = new Location("");
+            givenLocation.setLatitude(intent.getDoubleExtra("latitude", 1000));
+            givenLocation.setLongitude(intent.getDoubleExtra("longitude", 1000));
+        }
         return START_STICKY;
     }
 
@@ -47,6 +56,13 @@ public class GPSService extends Service {
                 Intent i = new Intent("location_update");
                 i.putExtra("longitude", location.getLongitude());
                 i.putExtra("latitude", location.getLatitude());
+
+                //jeśli żądano sprawdzenia odległości od danej lokalizacji:
+                /*if (CHECKING_DISTANCE_WANTED){
+                    float distance = location.distanceTo(givenLocation);
+                    i.putExtra("distance", distance);
+                }*/
+
                 sendBroadcast(i);
             }
 

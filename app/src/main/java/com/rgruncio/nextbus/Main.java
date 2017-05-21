@@ -47,7 +47,7 @@ public class Main extends AppCompatActivity {
 
 
                     //TODO: w tym miejscu będzie algorytm obsługujący wyszukiwanie najbliższego przystanku
-                    //TODO: na podstawie otrzymanej lokalizacji z urządzenia
+                    //na podstawie otrzymanej lokalizacji z urządzenia
 
                 }
             };
@@ -87,7 +87,15 @@ public class Main extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //jeśli przycisk włączony - startujemy usługę GPSService
                 if (isChecked){
+
                     Intent i = new Intent(getApplicationContext(), GPSService.class);
+
+                    //TODO: nadpisać tymczasowe przekazywanie lokalizacji testowej do usługi GPS
+
+                    i.putExtra("check_distance", "check_distance");
+                    i.putExtra("latitude", 1);
+                    i.putExtra("longitude", 2);
+
                     //TODO: uzupełnić przekazywanie danych do usługi
                     startService(i);
                 }

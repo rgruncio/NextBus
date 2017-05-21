@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">NextBus</string>
+    <string name="toggleButtonText">ToggleButton</string>
+    <string name="toggleButtonOff">Usługa wyłączona</string>
+    <string name="toggleButtonOn">Usługa włączona</string>
+    <string name="textViewLocalisation">Współrzędne:</string>
 </resources>
