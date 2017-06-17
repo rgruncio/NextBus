@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 
 public class GPSService extends Service {
 
+    public final static String INTENT_FILTER = "location_update";
 
 
     private LocationListener listener;
@@ -53,7 +54,7 @@ public class GPSService extends Service {
 
                 //w momencie wykrycia zmiany lokalizacji urządzenia, usługa wysyła Intent z aktualnymi
                 //danymi geolokalizacyjnymi
-                Intent i = new Intent("location_update");
+                Intent i = new Intent(INTENT_FILTER);
                 i.putExtra("longitude", location.getLongitude());
                 i.putExtra("latitude", location.getLatitude());
 

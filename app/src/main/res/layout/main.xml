@@ -34,4 +34,11 @@
         app:layout_constraintTop_toBottomOf="@+id/toggleButton"
         tools:layout_editor_absoluteX="8dp" />
 
+    <TextView
+        android:id="@+id/loginTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="-5dp"
+        tools:layout_editor_absoluteY="2dp" />
+
 </android.support.constraint.ConstraintLayout>
