@@ -4,6 +4,7 @@
     <string name="toggleButtonOff">Usługa wyłączona</string>
     <string name="toggleButtonOn">Usługa włączona</string>
     <string name="textViewLocalisation">Współrzędne:</string>
+    <string name="textViewDBResponse">DB Response:</string>
     <string name="title_activity_login">Zaloguj się</string>
 
     <!-- Strings related to login -->

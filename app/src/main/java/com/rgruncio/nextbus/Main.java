@@ -22,6 +22,7 @@ public class Main extends AppCompatActivity {
     private BroadcastReceiver sqlBcastRcvr;
     private BroadcastReceiver usrBcastRcvr;
     private TextView textView;
+    private TextView responseTextView;
     private Context context;
     private Intent loginIntent = null;
 
@@ -43,19 +44,21 @@ public class Main extends AppCompatActivity {
                     try {
                         latitude = intent.getExtras().get("latitude").toString();
                         longitude = intent.getExtras().get("longitude").toString();
+                        textView.setText("Device position:\nlongitude: " + longitude + "\nlatitude: " + latitude);
                     } catch (NullPointerException ex) {
                         ex.printStackTrace();
                     }
 
                     //uruchomienie usługi odpowiedzialnej za odpytywanie bazy danych
+                    //i wyszukiwanie najbliższego przystanku
                     Intent sqlIntent = new Intent(getApplicationContext(), SQLService.class);
 
-                    sqlIntent.putExtra(SQLService.QUERY, SQLService.DO_NOTHING);
+                    sqlIntent.putExtra(SQLService.LONGITUDE, longitude);
+                    sqlIntent.putExtra(SQLService.LATITUDE, latitude);
+
+                    sqlIntent.putExtra(SQLService.QUERY, SQLService.FIND_NEAREST_BUS_STOP);
 
                     startService(sqlIntent);
-
-                    //TODO: w tym miejscu będzie algorytm obsługujący wyszukiwanie najbliższego przystanku
-                    //na podstawie otrzymanej lokalizacji z urządzenia
 
                 }
             };
@@ -67,15 +70,16 @@ public class Main extends AppCompatActivity {
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String sqlResponse = null;
+                    String sqlResponse;
 
                     sqlResponse = intent.getStringExtra(SQLService.RESPONSE);
-                    textView.setText(sqlResponse);
-
+                    String text = "DB Response:\n" + sqlResponse;
+                    responseTextView.setText(text);
                 }
             };
         }
         registerReceiver(sqlBcastRcvr, new IntentFilter(SQLService.QUERY));
+        registerReceiver(sqlBcastRcvr, new IntentFilter(SQLService.FIND_USER));
 
 
         if (usrBcastRcvr == null){
@@ -112,6 +116,9 @@ public class Main extends AppCompatActivity {
         if (sqlBcastRcvr != null) {
             unregisterReceiver(sqlBcastRcvr);
         }
+        if (usrBcastRcvr != null) {
+            unregisterReceiver(usrBcastRcvr);
+        }
     }
 
     //Funkcja wywoływana przy uruchamianiu poraz pierwszy aplikacji (tworzenie UI i inicjalizacja obiektów)
@@ -123,6 +130,8 @@ public class Main extends AppCompatActivity {
         context = this.getApplicationContext();
 
         textView = (TextView) findViewById(R.id.textView);
+
+        responseTextView = (TextView) findViewById(R.id.resposeTextView);
 
         loginIntent = new Intent(this, Login.class);
         startActivity(loginIntent);
@@ -155,7 +164,7 @@ public class Main extends AppCompatActivity {
 
                     Intent sqlIntent = new Intent(getApplicationContext(), SQLService.class);
 
-                    sqlIntent.putExtra("query", "SELECT * FROM Przystanki;");
+                    sqlIntent.putExtra(SQLService.QUERY, SQLService.DO_NOTHING);
 
                     startService(sqlIntent);
                 } else {
